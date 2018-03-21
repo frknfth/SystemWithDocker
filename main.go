@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -285,6 +286,7 @@ func getAllStudents(rw http.ResponseWriter, req *http.Request) {
 	checkErr(err)
 	defer db.Close()
 
+	fmt.Println("selam")
 	rows, err := db.Query("SELECT * FROM Student")
 	checkErr(err)
 	defer rows.Close()
@@ -402,7 +404,7 @@ func getAllDepartments(rw http.ResponseWriter, req *http.Request) {
 
 	allDepartments := make([]Department, 0)
 
-	db, err := sql.Open("mysql", "root:root@tcp(172.17.0.2:3306)/University?charset=utf8")
+	db, err := sql.Open("mysql", "root:root@tcp( os.Getenv('MYSQL_URL') )/University?charset=utf8")
 	checkErr(err)
 	defer db.Close()
 

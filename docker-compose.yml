@@ -1,0 +1,49 @@
+version: '2'
+
+services:
+  mysql:
+    image: mysql:latest    
+    container_name: my-sql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root   
+    volumes:
+      - my-datavolume:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: myadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+    depends_on:
+      - mysql
+
+  system:
+    build: 
+      context: .
+      dockerfile: docker/system/Dockerfile
+    restart: always
+    ports:
+      - 8081:8081
+    depends_on:
+      - mysql
+      - phpmyadmin
+    links:
+      - mysql
+    command: go run main.go
+    environment:
+      MYSQL_URL: 172.17.0.2:6379
+
+volumes:
+  my-datavolume:
+
+
+    
+
+
+
+
+

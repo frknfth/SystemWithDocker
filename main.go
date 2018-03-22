@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -95,15 +94,13 @@ type KomplexEnrollment struct {
 	Section KomplexSection `json:"section"`
 }
 
+var db, err = sql.Open("mysql", "root:root@tcp(172.22.0.2:3306)/University")
+
 func saveStudent(rw http.ResponseWriter, req *http.Request) {
 	body, err := ioutil.ReadAll(req.Body)
 	checkErr(err)
 	student := Student{}
 	json.Unmarshal(body, &student)
-
-	db, err := sql.Open("mysql", "root:root@tcp(172.17.0.2:3306)/University?charset=utf8")
-	checkErr(err)
-	defer db.Close()
 	messageToClient := ""
 
 	student.FirstName = strings.TrimSpace(student.FirstName)
@@ -138,10 +135,6 @@ func saveDepartment(rw http.ResponseWriter, req *http.Request) {
 	dep := Department{}
 	json.Unmarshal(body, &dep)
 
-	db, err := sql.Open("mysql", "root:root@tcp(172.17.0.2:3306)/University?charset=utf8")
-	checkErr(err)
-	defer db.Close()
-
 	messageToClient := ""
 
 	dep.Code = strings.TrimSpace(dep.Code)
@@ -167,9 +160,6 @@ func saveCourse(rw http.ResponseWriter, req *http.Request) {
 	course := Course{}
 	json.Unmarshal(body, &course)
 
-	db, err := sql.Open("mysql", "root:root@tcp(172.17.0.2:3306)/University?charset=utf8")
-	checkErr(err)
-	defer db.Close()
 	messageToClient := ""
 
 	course.Title = strings.TrimSpace(course.Title)
@@ -197,9 +187,6 @@ func saveInstructor(rw http.ResponseWriter, req *http.Request) {
 	inst := Instructor{}
 	json.Unmarshal(body, &inst)
 
-	db, err := sql.Open("mysql", "root:root@tcp(172.17.0.2:3306)/University?charset=utf8")
-	checkErr(err)
-	defer db.Close()
 	messageToClient := ""
 
 	inst.FirstName = strings.TrimSpace(inst.FirstName)
@@ -229,9 +216,6 @@ func saveSection(rw http.ResponseWriter, req *http.Request) {
 	section := Section{}
 	json.Unmarshal(body, &section)
 
-	db, err := sql.Open("mysql", "root:root@tcp(172.17.0.2:3306)/University?charset=utf8")
-	checkErr(err)
-	defer db.Close()
 	messageToClient := ""
 
 	if section.CourseID == 0 {
@@ -259,9 +243,6 @@ func saveEnrollment(rw http.ResponseWriter, req *http.Request) {
 	enroll := Enrollment{}
 	json.Unmarshal(body, &enroll)
 
-	db, err := sql.Open("mysql", "root:root@tcp(172.17.0.2:3306)/University?charset=utf8")
-	checkErr(err)
-	defer db.Close()
 	messageToClient := ""
 
 	if enroll.SectionID == 0 {
@@ -282,11 +263,7 @@ func saveEnrollment(rw http.ResponseWriter, req *http.Request) {
 
 func getAllStudents(rw http.ResponseWriter, req *http.Request) {
 	allStudents := make([]KomplexStudent, 0)
-	db, err := sql.Open("mysql", "root:root@tcp(172.17.0.2:3306)/University?charset=utf8")
-	checkErr(err)
-	defer db.Close()
 
-	fmt.Println("selam")
 	rows, err := db.Query("SELECT * FROM Student")
 	checkErr(err)
 	defer rows.Close()
@@ -404,10 +381,6 @@ func getAllDepartments(rw http.ResponseWriter, req *http.Request) {
 
 	allDepartments := make([]Department, 0)
 
-	db, err := sql.Open("mysql", "root:root@tcp( os.Getenv('MYSQL_URL') )/University?charset=utf8")
-	checkErr(err)
-	defer db.Close()
-
 	rows, err := db.Query("SELECT * FROM Department")
 	checkErr(err)
 	defer rows.Close()
@@ -424,9 +397,6 @@ func getAllDepartments(rw http.ResponseWriter, req *http.Request) {
 func getAllCourses(rw http.ResponseWriter, req *http.Request) {
 
 	allCourses := make([]KomplexCourse, 0)
-	db, err := sql.Open("mysql", "root:root@tcp(172.17.0.2:3306)/University?charset=utf8")
-	checkErr(err)
-	defer db.Close()
 
 	rows, err := db.Query("SELECT * FROM Course")
 	checkErr(err)
@@ -461,9 +431,6 @@ func getAllCourses(rw http.ResponseWriter, req *http.Request) {
 func getAllInstructors(rw http.ResponseWriter, req *http.Request) {
 
 	allInstructors := make([]Instructor, 0)
-	db, err := sql.Open("mysql", "root:root@tcp(172.17.0.2:3306)/University?charset=utf8")
-	checkErr(err)
-	defer db.Close()
 
 	rows, err := db.Query("SELECT * FROM Instructor")
 	checkErr(err)
@@ -480,7 +447,7 @@ func getAllInstructors(rw http.ResponseWriter, req *http.Request) {
 }
 func getAllSections(rw http.ResponseWriter, req *http.Request) {
 	allSections := make([]KomplexSection, 0)
-	db, err := sql.Open("mysql", "root:root@tcp(172.17.0.2:3306)/University?charset=utf8")
+	db, err := sql.Open("mysql", "root:root@tcp(172.22.0.2:3306)/University")
 	checkErr(err)
 	defer db.Close()
 
@@ -557,9 +524,6 @@ func getAllSections(rw http.ResponseWriter, req *http.Request) {
 func getAllEnrollments(rw http.ResponseWriter, req *http.Request) {
 
 	allEnroll := make([]KomplexEnrollment, 0)
-	db, err := sql.Open("mysql", "root:root@tcp(172.17.0.2:3306)/University?charset=utf8")
-	checkErr(err)
-	defer db.Close()
 
 	rows, err := db.Query("SELECT * FROM Enrollment")
 	checkErr(err)
@@ -662,10 +626,6 @@ func deleteStudent(rw http.ResponseWriter, req *http.Request) {
 	student := Student{}
 	json.Unmarshal(body, &student)
 
-	db, err := sql.Open("mysql", "root:root@tcp(172.17.0.2:3306)/University?charset=utf8")
-	checkErr(err)
-	defer db.Close()
-
 	_, err = db.Query("DELETE FROM Student WHERE id=?", student.ID)
 	checkErr(err)
 }
@@ -674,10 +634,6 @@ func deleteDepartment(rw http.ResponseWriter, req *http.Request) {
 	checkErr(err)
 	dep := Department{}
 	json.Unmarshal(body, &dep)
-
-	db, err := sql.Open("mysql", "root:root@tcp(172.17.0.3:3306)/University?charset=utf8")
-	checkErr(err)
-	defer db.Close()
 
 	_, err = db.Query("DELETE FROM Department WHERE id=?", dep.ID)
 	checkErr(err)
@@ -688,10 +644,6 @@ func deleteCourse(rw http.ResponseWriter, req *http.Request) {
 	course := Course{}
 	json.Unmarshal(body, &course)
 
-	db, err := sql.Open("mysql", "root:root@tcp(172.17.0.2:3306)/University?charset=utf8")
-	checkErr(err)
-	defer db.Close()
-
 	_, err = db.Query("DELETE FROM Course WHERE id=?", course.ID)
 	checkErr(err)
 }
@@ -700,10 +652,6 @@ func deleteInstructor(rw http.ResponseWriter, req *http.Request) {
 	checkErr(err)
 	inst := Instructor{}
 	json.Unmarshal(body, &inst)
-
-	db, err := sql.Open("mysql", "root:root@tcp(172.17.0.2:3306)/University?charset=utf8")
-	checkErr(err)
-	defer db.Close()
 
 	_, err = db.Query("DELETE FROM Instructor WHERE id=?", inst.ID)
 	checkErr(err)
@@ -714,10 +662,6 @@ func deleteSection(rw http.ResponseWriter, req *http.Request) {
 	section := Section{}
 	json.Unmarshal(body, &section)
 
-	db, err := sql.Open("mysql", "root:root@tcp(172.17.0.3:3306)/University?charset=utf8")
-	checkErr(err)
-	defer db.Close()
-
 	_, err = db.Query("DELETE FROM Section WHERE id=?", section.ID)
 	checkErr(err)
 }
@@ -726,10 +670,6 @@ func deleteEnrollment(rw http.ResponseWriter, req *http.Request) {
 	checkErr(err)
 	enroll := Enrollment{}
 	json.Unmarshal(body, &enroll)
-
-	db, err := sql.Open("mysql", "root:root@tcp(172.17.0.2:3306)/University?charset=utf8")
-	checkErr(err)
-	defer db.Close()
 
 	stmt, err := db.Prepare("DELETE FROM Enrollment WHERE id=?")
 	checkErr(err)

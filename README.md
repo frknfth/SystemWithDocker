@@ -1,11 +1,30 @@
-# SystemWithDocker
+# Docker: Golang web + MySQL
 
-docker pull mysql ; docker pull phpmyadmin/phpmyadmin; docker build -t studentsystem .
+Reusable docker setup to start writing web apps with the [Go Programing Language](https://golang.org/). Generates a web container with Go and a db container with MySQL.
 
-docker run --name mysql -e MYSQL_ROOT_PASSWORD=root -d mysql:latest; docker run --name myadmin -d --link mysql:db -p 8080:80 phpmyadmin/phpmyadmin; 
+Requirements: Go, [Docker](https://www.docker.com/) and a [Go workspace](https://golang.org/doc/code.html#Workspaces).
 
-go to localhost:8080 root:root create database University and paste sql commands to console in phpmyadmin, then
+Steps:
 
-docker run -d -p 8081:8081 studentsystem
+```
+# cd into workspace directory
+cd $GOPATH
 
-go to localhost:8081
+# Clone the project
+go get github.com/frknfth/SystemWithDocker
+
+# cd into project directory
+cd src/github.com/frknfth/SystemWithDocker
+
+# Run containers
+docker-compose build
+docker-compose up -d
+
+# Confirm it all went up correctly. Exit with Ctrl+C
+docker-compose logs
+```
+phpMyAdmin : localhost:8080
+Our App : localhost:8081
+
+```
+

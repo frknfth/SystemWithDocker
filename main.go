@@ -447,9 +447,6 @@ func getAllInstructors(rw http.ResponseWriter, req *http.Request) {
 }
 func getAllSections(rw http.ResponseWriter, req *http.Request) {
 	allSections := make([]KomplexSection, 0)
-	db, err := sql.Open("mysql", "root:root@tcp(172.22.0.2:3306)/University")
-	checkErr(err)
-	defer db.Close()
 
 	rows, err := db.Query("SELECT * FROM Section")
 	checkErr(err)

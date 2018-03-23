@@ -23,8 +23,13 @@ docker-compose up -d
 # Confirm it all went up correctly. Exit with Ctrl+C
 docker-compose logs
 ```
-phpMyAdmin : localhost:8080
-Our App : localhost:8081
-
+phpMyAdmin : 
 ```
+localhost:8080
+```
+Our App :
+```
+localhost:8081
+```
+
 

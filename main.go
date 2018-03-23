@@ -94,7 +94,7 @@ type KomplexEnrollment struct {
 	Section KomplexSection `json:"section"`
 }
 
-var db, err = sql.Open("mysql", "root:root@tcp(172.22.0.2:3306)/University")
+var db, err = sql.Open("mysql", "root:root@tcp(172.28.1.1:3306)/University")
 
 func saveStudent(rw http.ResponseWriter, req *http.Request) {
 	body, err := ioutil.ReadAll(req.Body)

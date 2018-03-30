@@ -19,6 +19,7 @@ cd src/github.com/frknfth/SystemWithDocker
 # Run containers
 docker-compose build
 docker-compose up -d
+Our Database is empty
 
 # Confirm it all went up correctly. Exit with Ctrl+C
 docker-compose logs

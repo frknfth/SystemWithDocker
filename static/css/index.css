@@ -153,7 +153,7 @@ th {
     }
     #page-content-wrapper {
         position: absolute;
-        width: -moz-available;
+        width: 80%
     }
     #wrapper.toggled #page-content-wrapper {
         position: relative;

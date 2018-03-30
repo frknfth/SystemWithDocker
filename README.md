@@ -26,6 +26,7 @@ docker-compose logs
 phpMyAdmin : 
 ```
 localhost:8080
+user name - password : root - root
 ```
 Our App :
 ```

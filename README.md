@@ -11,7 +11,7 @@ Steps:
 cd $GOPATH
 
 # Clone the project
-git clone github.com/frknfth/SystemWithDocker
+go get github.com/frknfth/SystemWithDocker
 
 # cd into project directory
 cd src/github.com/frknfth/SystemWithDocker
